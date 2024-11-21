@@ -84,8 +84,8 @@ class Ontology:
         for term in self.terms.values():
             for parent in term.parents():
                 parent.children.add(term)
-                print(str(len(term.children)) + " ~~ " + str(len(parent.children)))
-        print(len(self.terms["GO:0042867"].children))
+                #print(str(len(term.children)) + " ~~ " + str(len(parent.children)))
+        #print(len(self.terms["GO:0042867"].children))
 
     def loadAnnoFile(self, annoFileName):
         fin = open(annoFileName, "r")

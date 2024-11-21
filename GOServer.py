@@ -1,5 +1,8 @@
 import cherrypy as cp
 from Ontology import Ontology
+import cherrypy_cors
+
+cherrypy_cors.install()
 
 #Update the CherryPy configuration
 cp.config.update('server.conf')
@@ -77,4 +80,11 @@ class GOServer(object):
             return msg
 
 if __name__ == '__main__':
-    cp.quickstart(GOServer())
+    print("Running main")
+    cherrypy_cors.install()
+    config = {
+        '/': {
+            'cors.expose.on': True,
+        },
+    }
+    cp.quickstart(GOServer(), config=config)
