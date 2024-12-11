@@ -128,19 +128,52 @@ class Ontology:
 
     #Return list of enrichment records from enrichment search
     def enrichByGeneNames(self, qGeneNames):
+        """Perform enrichment analysis for a list of gene names with FDR correction."""
+        from scipy.stats import rankdata
+        
+        # Convert gene names to Gene objects
         qGenes = set()
         for name in qGeneNames:
             if name in self.genes:
                 qGenes.add(self.genes[name])
+        
         if len(qGenes) == 0:
             return []
-        else:
-            termsToCheck = set()
-            enrichResults = []
-            for gene in qGenes:
-                termsToCheck = termsToCheck.union(gene.terms())
-            #for term in termsToCheck:
-            #    enrichResults.append(term.enrichRecord(qGenes, /**TODO**/))
+            
+        # Get all terms annotated to query genes and calculate enrichment
+        termsToCheck = set()
+        enrichResults = []
+        
+        # Collect terms to check from all query genes
+        for gene in qGenes:
+            termsToCheck = termsToCheck.union(gene.terms())
+            
+        # Calculate enrichment for each term
+        totalGenes = len(self.roots[0].allAnnos())  # Total genes in database
+        for term in termsToCheck:
+            result = term.enrichRecord(qGenes, totalGenes)
+            if result is not None:
+                enrichResults.append(result)
+                
+        # Apply FDR correction if we have results
+        if len(enrichResults) > 0:
+            # Extract p-values and sort enrichment results
+            pvals = [r.unadjPval for r in enrichResults]
+            
+            # Calculate FDR (Benjamini-Hochberg)
+            n_tests = len(pvals)
+            ranked_p_values = rankdata(pvals)
+            fdr = pvals * n_tests / ranked_p_values
+            fdr[fdr > 1] = 1  # Cap FDR at 1
+            
+            # Assign adjusted p-values back to enrichment results
+            for idx, result in enumerate(enrichResults):
+                result.pval = fdr[idx]
+                
+            # Sort by adjusted p-value
+            enrichResults.sort(key=lambda x: x.pval)
+            
+        return enrichResults
 
 
 if __name__ == '__main__':

@@ -1,0 +1,39 @@
+# Typical .cursorrules file for general projects
+
+# Syntax highlighting rules
+highlight:
+  keyword: blue          # Color for keywords
+  string: green          # Color for strings
+  comment: gray          # Color for comments
+  function: purple       # Color for functions
+  variable: orange       # Color for variables
+
+# Code formatting rules
+formatting:
+  indent_style: spaces   # Use spaces for indentation
+  indent_size: 2         # Number of spaces for each indent
+  max_line_length: 80    # Maximum line length before wrapping
+  trim_trailing_whitespace: true  # Remove trailing whitespace on save
+
+# Linting rules
+linting:
+  no_trailing_whitespace: true  # Disallow trailing whitespace
+  require_semicolons: true      # Require semicolons at the end of statements
+  no_unused_variables: true      # Warn about unused variables
+  consistent_return: true        # Ensure consistent return statements in functions
+
+# Autocompletion settings
+autocomplete:
+  enable: true                  # Enable autocompletion
+  suggestions:
+    - function                  # Suggest functions
+    - variable                  # Suggest variables
+    - class                     # Suggest classes
+    - method                    # Suggest methods
+
+# Miscellaneous settings
+misc:
+  enable_code_folding: true     # Enable code folding
+  show_line_numbers: true        # Show line numbers in the editor
+
+

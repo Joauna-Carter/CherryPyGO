@@ -101,6 +101,18 @@ class OntoTerm:
             p += hgd.pmf(x)
         return p
 
+    def enrichRecord(self, queryGenes, totalGenes):
+        """Calculate enrichment statistics for this term given a query gene set."""
+        from Enrichment import Enrichment
+        termGenes = self.allAnnos()
+        overlap = termGenes.intersection(queryGenes)
+        
+        # Only calculate if there is overlap
+        if len(overlap) > 0:
+            unadjPval = self.hyperGeomEnrich(queryGenes, totalGenes)
+            return Enrichment(self, unadjPval, None, overlap)
+        return None
+
 
 testOntolgoy = OntoTerm("GO:0000015",
                         "phosphopyruvate hydratase complex",
