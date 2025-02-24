@@ -175,7 +175,8 @@ class Ontology:
             
         return enrichResults
 
-
+#This is for the 2027 version of go.obo file
+'''
 if __name__ == '__main__':
     go = Ontology("go.obo","gene_association.mgi")
     for root in go.roots:
@@ -185,5 +186,19 @@ if __name__ == '__main__':
     print(len(go.genes))
 
     pvals = go.pvalsByGeneNames(["Notch1","Notch2","Notch3"])
+    for term in pvals:
+        print(term.uid + "\t" + str(pvals[term]) + "\t" + term.name) 
+'''
+
+#This is for the recent go.obo file
+if __name__ == '__main__':
+    go = Ontology("go2025.obo","gene_association25.sgd")
+    for root in go.roots:
+        print("*" + root.name)
+        print("**" + str(len(root.directAnnos())))
+        print("**" + str(len(root.allAnnos())))
+    print(len(go.genes))
+
+    pvals = go.pvalsByGeneNames(["FLO5","PAC2","SKP1"])
     for term in pvals:
         print(term.uid + "\t" + str(pvals[term]) + "\t" + term.name)
